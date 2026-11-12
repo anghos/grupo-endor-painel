@@ -7,9 +7,11 @@ import ru from 'element-plus/es/locale/lang/ru'
 import fr from 'element-plus/es/locale/lang/fr'
 import es from 'element-plus/es/locale/lang/es'
 import zhTw from 'element-plus/es/locale/lang/zh-tw'
+import ptBr from 'element-plus/es/locale/lang/pt-br'
 import { admin, app, server } from '@/api/config'
 
 const langs = {
+  'pt-BR': { name: 'Português (Brasil)', value: ptBr, sideBarWidth: '248px' },
   'zh-CN': { name: '中文', value: zhCn, sideBarWidth: '210px' },
   'en': { name: 'English', value: en, sideBarWidth: '230px' },
   'fr': { name: 'Français', value: fr, sideBarWidth: '280px' },
@@ -18,12 +20,14 @@ const langs = {
   'es': { name: 'Español', value: es, sideBarWidth: '280px' },
   'zh-TW': { name: '中文繁体', value: zhTw, sideBarWidth: '210px' },
 }
-const defaultLang = localStorage.getItem('lang') || navigator.language || 'zh-CN'
+// Grupo Endor: português do Brasil por padrão (o usuário ainda pode trocar)
+const savedLang = localStorage.getItem('lang')
+const defaultLang = savedLang && langs[savedLang] ? savedLang : 'pt-BR'
 export const useAppStore = defineStore({
   id: 'App',
   state: () => ({
     setting: {
-      title: 'Rustdesk API Admin',
+      title: 'Grupo Endor - Acesso Remoto',
       hello: '',
       sideIsCollapse: false,
       logo,

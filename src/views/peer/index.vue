@@ -1,7 +1,16 @@
 <template>
   <div>
     <el-card class="list-query" shadow="hover">
-      <el-form inline label-width="60px">
+      <el-form inline label-width="auto">
+        <el-form-item :label="T('Client')">
+          <el-select v-model="listQuery.group_id" clearable :placeholder="T('AllClients')">
+            <el-option :value="0" :label="T('NoClient')"></el-option>
+            <el-option v-for="g in groupListRes.list" :key="g.id" :label="g.name" :value="g.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-switch v-model="listQuery.online" :active-text="T('OnlyOnline')"/>
+        </el-form-item>
         <el-form-item label="ID">
           <el-input v-model="listQuery.id" clearable/>
         </el-form-item>
@@ -27,8 +36,8 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handlerQuery">{{ T('Filter') }}</el-button>
-          <el-button type="danger" @click="toAdd">{{ T('Add') }}</el-button>
-          <el-button type="success" @click="toExport">{{ T('Export') }}</el-button>
+          <el-button @click="toAdd">{{ T('Add') }}</el-button>
+          <el-button @click="toExport">{{ T('Export') }}</el-button>
           <el-popover :visible="showImport" placement="bottom" :width="600">
             <el-upload
                 class="upload-demo"
@@ -53,11 +62,12 @@
             </el-upload>
             <el-button @click="showImport=false" type="primary">{{ T('Cancel') }}</el-button>
             <template #reference>
-              <el-button @click="showImport=true" type="danger" :icon="ArrowDown">{{ T('Import') }}</el-button>
+              <el-button @click="showImport=true" :icon="ArrowDown">{{ T('Import') }}</el-button>
             </template>
           </el-popover>
-          <el-button type="danger" @click="toBatchDelete">{{ T('BatchDelete') }}</el-button>
-          <el-button type="primary" @click="toBatchAddToAB">{{ T('BatchAddToAB') }}</el-button>
+          <el-button type="primary" plain @click="toBatchMove">{{ T('MoveToClient') }}</el-button>
+          <el-button type="primary" plain @click="toBatchAddToAB">{{ T('BatchAddToAB') }}</el-button>
+          <el-button type="danger" plain @click="toBatchDelete">{{ T('BatchDelete') }}</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -81,13 +91,14 @@
           <el-table-column v-if="c.name==='last_online_time'" prop="last_online_time" :label="T('LastOnlineTime')" align="center" min-width="120">
             <template #default="{row}">
               <div class="last_oline_time">
-                <span> {{ row.last_online_time ? timeAgo(row.last_online_time * 1000) : '-' }}</span> <span class="dot" :class="{red: timeDis(row.last_online_time) >= 60, green: timeDis(row.last_online_time)< 60}"></span>
+                <span v-if="isOnline(row.last_online_time)" class="ge-status online">{{ T('Online') }}</span>
+                <span v-else class="ge-status offline">{{ row.last_online_time ? timeAgo(row.last_online_time * 1000) : '-' }}</span>
               </div>
             </template>
           </el-table-column>
           <el-table-column v-if="c.name==='last_online_ip'" prop="last_online_ip" :label="T('LastOnlineIp')" align="center" min-width="120"/>
           <el-table-column v-if="c.name==='username'" prop="username" :label="T('Username')" align="center" width="120"/>
-          <el-table-column v-if="c.name==='group_id'" prop="group_id" :label="T('Group')" align="center" width="120">
+          <el-table-column v-if="c.name==='group_id'" prop="group_id" :label="T('Client')" align="center" width="140">
             <template #default="{row}">
               <span v-if="row.group_id"> <el-tag>{{ groupListRes.list?.find(g => g.id === row.group_id)?.name }} </el-tag> </span>
               <span v-else> - </span>
@@ -100,13 +111,22 @@
           <el-table-column v-if="c.name==='updated_at'" prop="updated_at" :label="T('UpdatedAt')" align="center" width="150"/>
         </template>
 
-        <el-table-column :label="T('Actions')" align="center" width="500" class-name="table-actions" fixed="right">
+        <el-table-column :label="T('Actions')" align="center" width="250" class-name="table-actions" fixed="right">
           <template #default="{row}">
-            <el-button type="success" @click="connectByClient(row.id)">{{ T('Link') }}</el-button>
-            <el-button v-if="appStore.setting.appConfig.web_client" type="success" @click="toWebClientLink(row)">Web Client</el-button>
-            <el-button type="primary" @click="toAddressBook(row)">{{ T('AddToAddressBook') }}</el-button>
-            <el-button @click="toEdit(row)">{{ T('Edit') }}</el-button>
-            <el-button type="danger" @click="del(row)">{{ T('Delete') }}</el-button>
+            <el-tooltip :content="T('ConnectHint')" placement="top">
+              <el-button type="primary" size="small" @click="connectByClient(row.id)">{{ T('Connect') }}</el-button>
+            </el-tooltip>
+            <el-button v-if="appStore.setting.appConfig.web_client" size="small" @click="toWebClientLink(row)">Web</el-button>
+            <el-button size="small" @click="toEdit(row)">{{ T('Edit') }}</el-button>
+            <el-dropdown trigger="click">
+              <el-button size="small" :icon="MoreFilled"/>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="toAddressBook(row)">{{ T('AddToAddressBook') }}</el-dropdown-item>
+                  <el-dropdown-item divided @click="del(row)"><span style="color: var(--ge-danger)">{{ T('Delete') }}</span></el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </template>
         </el-table-column>
       </el-table>
@@ -125,8 +145,8 @@
         <el-form-item label="ID" prop="id" required>
           <el-input v-model="formData.id"></el-input>
         </el-form-item>
-        <el-form-item :label="T('Group')" prop="group_id">
-          <el-select v-model="formData.group_id">
+        <el-form-item :label="T('Client')" prop="group_id">
+          <el-select v-model="formData.group_id" clearable>
             <el-option
                 v-for="item in groupListRes.list"
                 :key="item.id"
@@ -164,6 +184,21 @@
           <el-button @click="submit" type="primary">{{ T('Submit') }}</el-button>
         </el-form-item>
       </el-form>
+    </el-dialog>
+
+    <el-dialog v-model="moveVisible" width="440" :title="T('MoveToClient')">
+      <el-form label-position="top">
+        <el-form-item :label="T('Client')">
+          <el-select v-model="moveGroupId" style="width: 100%">
+            <el-option :value="0" :label="T('NoClient')"></el-option>
+            <el-option v-for="g in groupListRes.list" :key="g.id" :label="g.name" :value="g.id"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="moveVisible = false">{{ T('Cancel') }}</el-button>
+        <el-button type="primary" :disabled="moveGroupId === null" :loading="moving" @click="submitBatchMove">{{ T('Save') }}</el-button>
+      </template>
     </el-dialog>
 
     <el-dialog v-model="ABFormVisible" width="800" :title="T('Create')" destroy-on-close>
@@ -240,8 +275,9 @@
   import { jsonToCsv, downBlob } from '@/utils/file'
   import { loadAllUsers } from '@/global'
   import { useAppStore } from '@/store/app'
-  import { connectByClient } from '@/utils/peer'
-  import { ArrowDown, ArrowUp, CopyDocument, Setting } from '@element-plus/icons'
+  import { connectByClient, isOnline } from '@/utils/peer'
+  import { ArrowDown, ArrowUp, CopyDocument, MoreFilled, Setting } from '@element-plus/icons'
+  import { useRoute } from 'vue-router'
   import { handleClipboard } from '@/utils/clipboard'
   import { batchCreateFromPeers } from '@/api/address_book'
   import { useRepositories as useCollectionRepositories } from '@/views/address_book/collection'
@@ -281,17 +317,60 @@
     hostname: '',
     username: '',
     ip: '',
+    // Grupo Endor: filtros aplicados no navegador (a API não filtra por grupo/online)
+    group_id: null,
+    online: false,
   })
 
+  const hasGroupFilter = () => listQuery.group_id !== null && listQuery.group_id !== undefined && listQuery.group_id !== ''
   const getList = async () => {
     listRes.loading = true
-    const res = await list(listQuery).catch(_ => false)
+    const { group_id, online, ...apiQuery } = listQuery
+    if (hasGroupFilter() || online) {
+      const res = await list({ ...apiQuery, page: 1, page_size: 5000 }).catch(_ => false)
+      listRes.loading = false
+      if (res) {
+        const known = new Set(groupListRes.list.map(g => g.id))
+        let all = res.data.list
+        if (hasGroupFilter()) {
+          all = group_id === 0
+            ? all.filter(p => !p.group_id || !known.has(p.group_id))
+            : all.filter(p => p.group_id === group_id)
+        }
+        if (online) {
+          all = all.filter(p => isOnline(p.last_online_time))
+        }
+        listRes.total = all.length
+        listRes.list = all.slice((listQuery.page - 1) * listQuery.page_size, listQuery.page * listQuery.page_size)
+      }
+      return
+    }
+    const res = await list(apiQuery).catch(_ => false)
     listRes.loading = false
     if (res) {
       listRes.list = res.data.list
       listRes.total = res.data.total
     }
   }
+
+  // Filtros vindos do painel inicial / tela de clientes (?group_id=..&online=1)
+  const route = useRoute()
+  const applyRouteQuery = () => {
+    if (route.name !== 'Peer') return
+    if (route.query.group_id !== undefined) {
+      listQuery.group_id = Number(route.query.group_id)
+    }
+    if (route.query.online !== undefined) {
+      listQuery.online = route.query.online === '1'
+    }
+  }
+  applyRouteQuery()
+  watch(() => route.query, () => {
+    if (route.name === 'Peer') {
+      applyRouteQuery()
+      handlerQuery()
+    }
+  })
   const handlerQuery = () => {
     if (listQuery.page === 1) {
       getList()
@@ -322,6 +401,7 @@
   watch(() => listQuery.page, getList)
 
   watch(() => listQuery.page_size, handlerQuery)
+  watch(() => [listQuery.group_id, listQuery.online], handlerQuery)
 
   const formVisible = ref(false)
   const formData = reactive({
@@ -335,6 +415,8 @@
     username: '',
     uuid: '',
     version: '',
+    // Grupo Endor: sem este campo o "Editar" apagava o apelido do dispositivo
+    alias: '',
   })
 
   const toEdit = (row) => {
@@ -343,6 +425,7 @@
     Object.keys(formData).forEach(key => {
       formData[key] = row[key]
     })
+    formData.group_id = row.group_id || null
   }
   const toAdd = () => {
     formVisible.value = true
@@ -356,10 +439,12 @@
     formData.username = ''
     formData.uuid = ''
     formData.version = ''
+    formData.alias = ''
+    formData.group_id = null
   }
   const submit = async () => {
     const api = formData.row_id ? update : create
-    const res = await api(formData).catch(_ => false)
+    const res = await api({ ...formData, group_id: formData.group_id || 0 }).catch(_ => false)
     if (res) {
       ElMessage.success(T('OperationSuccess'))
       formVisible.value = false
@@ -480,6 +565,36 @@
       ElMessage.success(T('OperationSuccess'))
       getList()
     }
+  }
+
+  // Grupo Endor: mover selecionados para um cliente (grupo de dispositivos)
+  const moveVisible = ref(false)
+  const moveGroupId = ref(null)
+  const moving = ref(false)
+  const toBatchMove = () => {
+    if (!multipleSelection.value.length) {
+      ElMessage.warning(T('PleaseSelectData'))
+      return
+    }
+    moveGroupId.value = null
+    moveVisible.value = true
+  }
+  const submitBatchMove = async () => {
+    const fields = ['row_id', 'id', 'cpu', 'hostname', 'memory', 'os', 'username', 'uuid', 'version', 'alias']
+    moving.value = true
+    const results = await Promise.all(multipleSelection.value.map(row => {
+      const data = {}
+      fields.forEach(k => { data[k] = row[k] })
+      data.group_id = moveGroupId.value || 0
+      return update(data).catch(_ => false)
+    }))
+    moving.value = false
+    const done = results.filter(Boolean).length
+    if (done) {
+      ElMessage.success(T('MoveToClientDone', { param: done }))
+    }
+    moveVisible.value = false
+    getList()
   }
 
   // 批量添加到地址簿 start

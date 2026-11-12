@@ -1,0 +1,248 @@
+// Grupo Endor — tema do console administrativo (claro e escuro).
+// Cores da marca: azul-marinho da logo (#1A4A6B) e estrela em azul/preto.
+
+:root {
+  --ge-font: 'Inter Variable', 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif;
+
+  --ge-bg: #f3f5f9;
+  --ge-surface: #ffffff;
+  --ge-surface-2: #f7f9fc;
+  --ge-border: #e3e8ef;
+  --ge-text: #16212e;
+  --ge-text-2: #5b6878;
+  --ge-text-3: #8a96a6;
+  --ge-brand: #1a4a6b;
+  --ge-accent: #1f5f8b;
+  --ge-accent-soft: #e9eff3;
+  --ge-success: #16a34a;
+  --ge-success-soft: #dcfce7;
+  --ge-danger: #dc2626;
+  --ge-warning: #d97706;
+  --ge-sidebar-bg: #ffffff;
+  --ge-sidebar-text: #445265;
+  --ge-sidebar-active-bg: #e9eff3;
+  --ge-sidebar-active-text: #1a4a6b;
+  --ge-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06);
+  --ge-shadow-lg: 0 10px 30px rgba(16, 24, 40, 0.08);
+  --ge-radius: 12px;
+
+  // Element Plus — cor primária da marca
+  --el-color-primary: #1f5f8b;
+  --el-color-primary-light-3: #628fae;
+  --el-color-primary-light-5: #8fafc5;
+  --el-color-primary-light-7: #bccfdc;
+  --el-color-primary-light-8: #d2dfe8;
+  --el-color-primary-light-9: #e9eff3;
+  --el-color-primary-dark-2: #194c6f;
+  --el-color-success: #16a34a;
+  --el-border-radius-base: 8px;
+  --el-font-family: var(--ge-font);
+  --el-bg-color-page: var(--ge-bg);
+
+  --tag-bg-color: #eef2f7;
+  --basicBlack: #16212e;
+}
+
+html.dark {
+  --ge-bg: #0d141c;
+  --ge-surface: #141d27;
+  --ge-surface-2: #18232f;
+  --ge-border: #233142;
+  --ge-text: #e6edf5;
+  --ge-text-2: #a3b1c2;
+  --ge-text-3: #6f7f92;
+  --ge-brand: #4f9bd8;
+  --ge-accent: #4f9bd8;
+  --ge-accent-soft: #1a2a3a;
+  --ge-success: #22c55e;
+  --ge-success-soft: #12301f;
+  --ge-sidebar-bg: #101821;
+  --ge-sidebar-text: #a3b1c2;
+  --ge-sidebar-active-bg: #1a2a3a;
+  --ge-sidebar-active-text: #8cc4f0;
+  --ge-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --ge-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.35);
+
+  --el-color-primary: #4f9bd8;
+  --el-color-primary-light-3: #3d739d;
+  --el-color-primary-light-5: #325876;
+  --el-color-primary-light-7: #263c4f;
+  --el-color-primary-light-8: #213342;
+  --el-color-primary-light-9: #1a2228;
+  --el-color-primary-dark-2: #72afe0;
+  --el-bg-color: #141d27;
+  --el-bg-color-overlay: #18232f;
+  --el-bg-color-page: #0d141c;
+  --el-fill-color-blank: #141d27;
+  --el-border-color: #2a3a4d;
+  --el-border-color-light: #233142;
+  --el-border-color-lighter: #1e2b3a;
+
+  --tag-bg-color: #1a2a3a;
+  --basicBlack: #e6edf5;
+}
+
+html, body {
+  background: var(--ge-bg);
+  color: var(--ge-text);
+  font-family: var(--ge-font);
+  -webkit-font-smoothing: antialiased;
+}
+
+#nprogress .bar {
+  background: var(--el-color-primary) !important;
+  height: 3px !important;
+}
+
+// ---------- Cards / áreas de conteúdo ----------
+.app-main {
+  .el-card {
+    border: 1px solid var(--ge-border);
+    border-radius: var(--ge-radius);
+    box-shadow: var(--ge-shadow) !important;
+    background: var(--ge-surface);
+  }
+
+  .el-card + .el-card {
+    margin-top: 16px;
+  }
+
+  .list-query {
+    .el-card__body {
+      padding: 16px 20px 0;
+    }
+
+    .el-form-item {
+      margin-bottom: 16px;
+    }
+
+    .el-form-item__label {
+      color: var(--ge-text-2);
+      font-weight: 500;
+    }
+  }
+
+  .list-body {
+    margin: 16px 0;
+  }
+
+  .list-page .el-card__body {
+    padding: 12px 20px;
+  }
+}
+
+// ---------- Tabelas ----------
+.el-table {
+  --el-table-header-bg-color: var(--ge-surface-2);
+  --el-table-header-text-color: var(--ge-text-2);
+  --el-table-row-hover-bg-color: var(--ge-accent-soft);
+  --el-table-border-color: var(--ge-border);
+  border-radius: 10px;
+  font-size: 13px;
+
+  th.el-table__cell {
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  // As colunas das telas originais têm larguras fixas estreitas:
+  // quebrar só entre palavras, nunca no meio delas.
+  .cell {
+    line-height: 1.5;
+    word-break: normal;
+    overflow-wrap: normal;
+  }
+}
+
+.el-table--border {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+// ---------- Botões, inputs, tags ----------
+.el-button {
+  font-weight: 500;
+  border-radius: 8px;
+}
+
+.el-input__wrapper,
+.el-select__wrapper,
+.el-textarea__inner {
+  border-radius: 8px;
+}
+
+.el-tag {
+  border-radius: 6px;
+}
+
+.el-dialog {
+  border-radius: 14px;
+  padding: 20px 24px;
+
+  .el-dialog__title {
+    font-weight: 600;
+  }
+}
+
+.el-pagination {
+  justify-content: flex-end;
+}
+
+// ---------- Utilidades usadas pelas telas novas ----------
+.ge-page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    color: var(--ge-text);
+  }
+
+  p {
+    margin: 4px 0 0;
+    color: var(--ge-text-2);
+    font-size: 14px;
+  }
+}
+
+.ge-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 999px;
+
+  &::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  &.online {
+    color: var(--ge-success);
+    background: var(--ge-success-soft);
+  }
+
+  &.offline {
+    color: var(--ge-text-3);
+    background: var(--ge-surface-2);
+  }
+}
+
+.ge-empty {
+  padding: 28px 12px;
+  text-align: center;
+  color: var(--ge-text-3);
+  font-size: 13px;
+}

@@ -1,72 +1,59 @@
 <template>
-  <el-icon class="ex-icon" @click="expandOrFoldSlider">
-    <el-icon-expand v-if="setting.sideIsCollapse"></el-icon-expand>
-    <el-icon-fold v-else></el-icon-fold>
-  </el-icon>
-  <div class="header-logo">
-    <img :src="setting.logo" alt="" class="logo">
-    <div class="title">{{setting.title}}</div>
+  <div class="ge-header-inner">
+    <div class="ge-title">
+      <span class="ge-section" v-if="section">{{ section }}</span>
+      <span class="ge-sep" v-if="section">/</span>
+      <span class="ge-page">{{ pageTitle }}</span>
+    </div>
+    <Setting></Setting>
   </div>
-  <Setting></Setting>
 </template>
 
-<script>
-  import { defineComponent, computed } from 'vue'
-  import HeaderMenu from '@/layout/components/menu/index.vue'
+<script setup>
+  import { computed } from 'vue'
+  import { useRoute } from 'vue-router'
   import Setting from '@/layout/components/setting/index.vue'
-  import { useAppStore } from '@/store/app'
-  import GTags from '@/layout/components/tags/index.vue'
+  import { T } from '@/utils/i18n'
 
-  export default defineComponent({
-    name: 'LayerHeader',
-    created () {
-    },
-    components: { HeaderMenu, Setting, GTags },
-    watch: {},
-    setup (props) {
-      const appStore = useAppStore()
-      const setting = computed(() => appStore.setting)
-      const expandOrFoldSlider = () => {
-        appStore.sideCollapse()
-      }
-      return {
-        setting,
-        expandOrFoldSlider,
-      }
-    },
-
+  const route = useRoute()
+  const pageTitle = computed(() => T(route.meta?.title || route.name))
+  const section = computed(() => {
+    const parent = route.matched.length > 1 ? route.matched[0] : null
+    if (!parent || !parent.meta?.title) return ''
+    const visibleChildren = (parent.children || []).filter(c => !c.meta?.hide)
+    return visibleChildren.length > 1 ? T(parent.meta.title) : ''
   })
 </script>
 
 <style scoped lang="scss">
-  .ex-icon {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
-    font-size: 16px;
-    cursor: pointer;
+.ge-header-inner {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.ge-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  min-width: 0;
+
+  .ge-section {
+    color: var(--ge-text-3);
+    font-weight: 500;
   }
 
-  .header-logo {
-    display: flex;
-    height: 100%;
-    align-items: center;
-
-    .title {
-      display: block;
-      margin-left: 10px;
-    }
-
-    .logo {
-      display: block;
-      width: 30px;
-      height: 30px;
-    }
+  .ge-sep {
+    color: var(--ge-border);
   }
 
-
-</style>
-<style lang="scss">
-
+  .ge-page {
+    color: var(--ge-text);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
 </style>

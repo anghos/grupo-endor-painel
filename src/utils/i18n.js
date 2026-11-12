@@ -5,9 +5,11 @@ import ko from '@/utils/i18n/ko.json'
 import ru from '@/utils/i18n/ru.json'
 import es from '@/utils/i18n/es.json'
 import zhTW from '@/utils/i18n/zh_TW.json'
+import ptBR from '@/utils/i18n/pt_BR.json'
 import { useAppStore } from '@/store/app'
 
 const trans = {
+  'pt-BR': ptBR,
   'en': en,
   'fr': fr,
   'zh-CN': zhCN,

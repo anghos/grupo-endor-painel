@@ -531,5 +531,155 @@
   },
   "Remark": {
     "One": "Remark"
+  },
+  "MenuHome": {
+    "One": "Home"
+  },
+  "MenuDevices": {
+    "One": "Devices"
+  },
+  "MenuClients": {
+    "One": "Clients"
+  },
+  "MenuAccess": {
+    "One": "Access & audit"
+  },
+  "MenuTeam": {
+    "One": "Team"
+  },
+  "MenuAddressBook": {
+    "One": "Address book"
+  },
+  "MenuServer": {
+    "One": "Server"
+  },
+  "MenuMyAccount": {
+    "One": "My account"
+  },
+  "Dashboard": {
+    "One": "Home"
+  },
+  "Clients": {
+    "One": "Clients"
+  },
+  "Client": {
+    "One": "Client"
+  },
+  "NoClient": {
+    "One": "No client"
+  },
+  "NewClient": {
+    "One": "New client"
+  },
+  "ClientName": {
+    "One": "Client name"
+  },
+  "ClientsHint": {
+    "One": "Organize computers by client or company. To assign a computer, use \"Move to client\" in the device list."
+  },
+  "ViewDevices": {
+    "One": "View devices"
+  },
+  "MoveToClient": {
+    "One": "Move to client"
+  },
+  "MoveToClientDone": {
+    "One": "{param} device(s) moved"
+  },
+  "DevicesTotal": {
+    "One": "Devices"
+  },
+  "DevicesOnline": {
+    "One": "Online now"
+  },
+  "DevicesOffline": {
+    "One": "Offline"
+  },
+  "AccessesToday": {
+    "One": "Accesses today"
+  },
+  "LoginsToday": {
+    "One": "Logins today"
+  },
+  "Technicians": {
+    "One": "Technicians"
+  },
+  "AccessesLast7Days": {
+    "One": "Accesses in the last 7 days"
+  },
+  "RecentAccesses": {
+    "One": "Recent accesses"
+  },
+  "RecentLogins": {
+    "One": "Recent logins"
+  },
+  "OnlineDevices": {
+    "One": "Online devices"
+  },
+  "SeeAll": {
+    "One": "See all"
+  },
+  "NoData": {
+    "One": "Nothing here yet"
+  },
+  "Online": {
+    "One": "Online"
+  },
+  "Offline": {
+    "One": "Offline"
+  },
+  "Connect": {
+    "One": "Connect"
+  },
+  "ConnectHint": {
+    "One": "Opens the GrupoEndor installed on this computer, connecting to the device"
+  },
+  "SearchDevices": {
+    "One": "Search by ID, name, user or IP"
+  },
+  "AllClients": {
+    "One": "All clients"
+  },
+  "OnlyOnline": {
+    "One": "Online only"
+  },
+  "UpdatedEvery30s": {
+    "One": "Refreshes every 30 seconds"
+  },
+  "Welcome": {
+    "One": "Hello, {param}"
+  },
+  "WelcomeSub": {
+    "One": "Here is the Grupo Endor remote access overview"
+  },
+  "AccessRemote": {
+    "One": "Remote Access"
+  },
+  "LoginTitle": {
+    "One": "Admin console"
+  },
+  "LoginSubtitle": {
+    "One": "Sign in with your Grupo Endor account"
+  },
+  "ThemeLight": {
+    "One": "Light theme"
+  },
+  "ThemeDark": {
+    "One": "Dark theme"
+  },
+  "Devices": {
+    "One": "devices"
+  },
+  "MyPeer": {
+    "One": "My devices"
+  },
+  "Import": {
+    "One": "Import"
+  },
+  "View": {
+    "One": "View"
+  },
+  "More": {
+    "One": "More"
   }
 }

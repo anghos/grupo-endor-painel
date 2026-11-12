@@ -43,7 +43,11 @@ router.beforeEach(async (to, from, next) => {
       }
     }/* else if (to.path === '/404') {
       next({path: to.redirectedFrom?.fullPath, replace: true})
-    }*/ else {
+    }*/ else if (to.name === 'Root') {
+      // Grupo Endor: administradores começam pelo painel; técnicos, pelo perfil
+      const isAdmin = userStore.route_names.includes('*')
+      next({ name: isAdmin ? 'Dashboard' : 'MyInfo', replace: true })
+    } else {
       next()
     }
   }

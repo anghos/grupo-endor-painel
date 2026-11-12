@@ -1,7 +1,17 @@
 <template>
   <div class="login-container">
+    <div class="login-brand">
+      <div class="brand-inner">
+        <img src="@/assets/logo-full-dark.png" alt="Grupo Endor" class="brand-logo"/>
+        <h2>{{ T('AccessRemote') }}</h2>
+        <p>{{ T('LoginTitle') }}</p>
+      </div>
+      <img src="@/assets/logo.png" alt="" class="brand-star" aria-hidden="true"/>
+    </div>
     <div class="login-card">
       <img src="@/assets/logo.png" alt="logo" class="login-logo"/>
+      <h1>{{ T('Login') }}</h1>
+      <p class="login-sub">{{ T('LoginSubtitle') }}</p>
 
       <el-form v-if="!disablePwd" label-position="top" class="login-form">
         <el-form-item :label="T('Username')">
@@ -170,44 +180,114 @@
 
 <style scoped lang="scss">
 .login-container {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(380px, 1fr);
+  min-height: 100vh;
+  background: var(--ge-bg);
+}
+
+.login-brand {
+  position: relative;
+  overflow: hidden;
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #2d3a4b;
-  padding: 20px;
-  box-sizing: border-box;
+  justify-content: center;
+  padding: 48px;
+  color: #fff;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(79, 155, 216, 0.35), transparent 45%),
+    linear-gradient(145deg, #0f2d44 0%, #1a4a6b 55%, #12364f 100%);
+
+  .brand-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 420px;
+    text-align: center;
+  }
+
+  .brand-logo {
+    width: 240px;
+    max-width: 70%;
+    margin-bottom: 28px;
+  }
+
+  h2 {
+    margin: 0 0 8px;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin: 0;
+    font-size: 15px;
+    opacity: 0.75;
+  }
+
+  .brand-star {
+    position: absolute;
+    right: -120px;
+    bottom: -120px;
+    width: 460px;
+    opacity: 0.07;
+    filter: brightness(0) invert(1);
+  }
 }
 
 .login-card {
-  width: 360px;
-  background-color: #283342;
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  align-self: center;
+  justify-self: center;
+  width: 100%;
+  max-width: 380px;
+  padding: 40px 32px;
+  box-sizing: border-box;
+
+  h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ge-text);
+    letter-spacing: -0.02em;
+  }
+
+  .login-sub {
+    margin: 6px 0 28px;
+    color: var(--ge-text-2);
+    font-size: 14px;
+  }
 }
 
-h1 {
-  margin-bottom: 20px;
-  font-size: 24px;
-  font-weight: bold;
+.login-logo {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 18px;
+  display: none;
 }
 
 .login-form {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
+
+  :deep(.el-form-item__label) {
+    font-weight: 500;
+    color: var(--ge-text-2);
+  }
+
+  :deep(.el-input__wrapper) {
+    min-height: 42px;
+  }
 }
 
 .login-input {
   width: 100%;
-  .captcha{
+
+  .captcha {
     cursor: pointer;
     width: 150px;
   }
 }
-.captcha-input{
+
+.captcha-input {
   :deep(.el-input-group__append) {
-    border-radius: 5px;
     padding: 0;
     overflow: hidden;
   }
@@ -215,33 +295,29 @@ h1 {
 
 .login-button {
   width: 100%;
-  height: 40px;
-  margin-bottom: 20px;
-  margin-left: 0;
+  height: 44px;
+  margin: 8px 0 0 !important;
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .divider {
   display: flex;
   align-items: center;
   margin: 20px 0;
-  font-size: 14px;
-  color: #888;
+  font-size: 13px;
+  color: var(--ge-text-3);
 
   &::before,
   &::after {
     content: '';
     flex: 1;
     height: 1px;
-    background-color: #ddd;
+    background-color: var(--ge-border);
   }
 
-  &::before {
-    margin-right: 10px;
-  }
-
-  &::after {
-    margin-left: 10px;
-  }
+  &::before { margin-right: 10px; }
+  &::after { margin-left: 10px; }
 }
 
 .oidc-options {
@@ -256,42 +332,26 @@ h1 {
   justify-content: center;
   gap: 10px;
   width: 100%;
-  height: 50px;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  color: black;
+  height: 46px;
   font-size: 14px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .oidc-icon {
-  width: 24px;
-  height: 24px;
-  margin-right: 10px;
+  width: 22px;
+  height: 22px;
 }
 
-.login-logo {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 20px;
-  display: block;
-}
-
-.el-form-item {
-  ::v-deep(.el-form-item__label) {
-    color: #fff;
+@media (max-width: 900px) {
+  .login-container {
+    grid-template-columns: 1fr;
   }
 
-  .el-input {
-    ::v-deep(.el-input__wrapper) {
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: transparent;
-    }
+  .login-brand {
+    display: none;
+  }
 
-    ::v-deep(input) {
-      color: #fff;
-    }
+  .login-logo {
+    display: block;
   }
 }
 </style>

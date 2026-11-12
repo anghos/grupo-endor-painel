@@ -2,6 +2,13 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 const constantRoutes = [
   {
+    // Grupo Endor: destino decidido em permission.js (admin -> Início, técnico -> perfil)
+    path: '/',
+    name: 'Root',
+    meta: { title: 'Dashboard' },
+    component: { render: () => null },
+  },
+  {
     path: '/login',
     name: 'Login',
     meta: { title: 'Login' },
@@ -31,71 +38,83 @@ const constantRoutes = [
     hidden: true,
   },
 ]
+
+const Layout = () => import('@/layout/index.vue')
+
+// Grupo Endor: menu agrupado por assunto. Os "name" das rotas são os mesmos do
+// projeto original, pois o backend libera as telas por nome (admin = "*").
 export const asyncRoutes = [
-  // {
-  //   path: '/',
-  //   name: 'Index',
-  //   redirect: '/Home',
-  //   meta: { title: '首页', icon: 'house' },
-  //   component: () => import('@/layout/index.vue'),
-  //   children: [
-  //     {
-  //       path: '/Home',
-  //       name: 'Home',
-  //       meta: { title: '首页', icon: 'house' },
-  //       component: () => import('@/views/index/index.vue'),
-  //     },
-  //
-  //   ],
-  // },
   {
-    path: '/my',
-    name: 'My',
-    redirect: '/',
-    meta: { title: 'My', icon: 'UserFilled' },
-    component: () => import('@/layout/index.vue'),
+    path: '/inicio',
+    name: 'Home',
+    meta: { title: 'MenuHome', icon: 'House' },
+    component: Layout,
     children: [
       {
-        path: '/',
-        name: 'MyInfo',
-        meta: { title: 'Userinfo', icon: 'User' /*keepAlive: true*/ },
-        component: () => import('@/views/my/info.vue'),
+        path: '',
+        name: 'Dashboard',
+        meta: { title: 'Dashboard', icon: 'House' },
+        component: () => import('@/views/dashboard/index.vue'),
+      },
+    ],
+  },
+  {
+    path: '/dispositivos',
+    name: 'Devices',
+    meta: { title: 'MenuDevices', icon: 'Monitor' },
+    component: Layout,
+    children: [
+      {
+        path: '',
+        name: 'Peer',
+        meta: { title: 'PeerManage', icon: 'Monitor' },
+        component: () => import('@/views/peer/index.vue'),
+      },
+    ],
+  },
+  {
+    path: '/clientes',
+    name: 'Clients',
+    meta: { title: 'MenuClients', icon: 'OfficeBuilding' },
+    component: Layout,
+    children: [
+      {
+        path: '',
+        name: 'DeviceGroup',
+        meta: { title: 'Clients', icon: 'OfficeBuilding' },
+        component: () => import('@/views/clients/index.vue'),
+      },
+    ],
+  },
+  {
+    path: '/acessos',
+    name: 'Access',
+    meta: { title: 'MenuAccess', icon: 'DataLine' },
+    component: Layout,
+    children: [
+      {
+        path: 'conexoes',
+        name: 'AuditConn',
+        meta: { title: 'AuditConnLog', icon: 'Tickets' },
+        component: () => import('@/views/audit/connList.vue'),
       },
       {
-        path: 'peer',
-        name: 'MyPeer',
-        meta: { title: 'MyPeer', icon: 'Monitor' /*keepAlive: true*/ },
-        component: () => import('@/views/my/peer/index.vue'),
+        path: 'arquivos',
+        name: 'AuditFile',
+        meta: { title: 'AuditFileLog', icon: 'Files' },
+        component: () => import('@/views/audit/fileList.vue'),
       },
       {
-        path: 'address_book_collection',
-        name: 'MyAddressBookCollection',
-        meta: { title: 'AddressBookName', icon: 'Collection' /*keepAlive: true*/ },
-        component: () => import('@/views/my/address_book/collection.vue'),
+        path: 'logins',
+        name: 'LoginLog',
+        meta: { title: 'LoginLog', icon: 'List' },
+        component: () => import('@/views/login/log.vue'),
       },
       {
-        path: 'address_book',
-        name: 'MyAddressBookList',
-        meta: { title: 'AddressBooks', icon: 'Notebook' /*keepAlive: true*/ },
-        component: () => import('@/views/my/address_book/index.vue'),
-      },
-      {
-        path: 'tag',
-        name: 'MyTagList',
-        meta: { title: 'Tags', icon: 'CollectionTag' /*keepAlive: true*/ },
-        component: () => import('@/views/my/tag/index.vue'),
-      },
-      {
-        path: 'shareRecord',
-        name: 'MyShareRecordList',
-        meta: { title: 'ShareRecord', icon: 'Share' /*keepAlive: true*/ },
-        component: () => import('@/views/my/share_record/index.vue'),
-      },
-      {
-        path: 'loginLog',
-        name: 'MyLoginLog',
-        meta: { title: 'LoginLog', icon: 'List' /*keepAlive: true*/ },
-        component: () => import('@/views/my/login_log/index.vue'),
+        path: 'compartilhamentos',
+        name: 'ShareRecord',
+        meta: { title: 'ShareRecord', icon: 'Share' },
+        component: () => import('@/views/share_record/index.vue'),
       },
     ],
   },
@@ -103,31 +122,13 @@ export const asyncRoutes = [
     path: '/user',
     name: 'User',
     redirect: '/user/index',
-    meta: { title: 'System', icon: 'Setting' },
-    component: () => import('@/layout/index.vue'),
+    meta: { title: 'MenuTeam', icon: 'UserFilled' },
+    component: Layout,
     children: [
-      {
-        path: 'peer',
-        name: 'Peer',
-        meta: { title: 'PeerManage', icon: 'Monitor' /*keepAlive: true*/ },
-        component: () => import('@/views/peer/index.vue'),
-      },
-      {
-        path: 'group',
-        name: 'UserGroup',
-        meta: { title: 'GroupManage', icon: 'ChatRound' /*keepAlive: true*/ },
-        component: () => import('@/views/group/index.vue'),
-      },
-      {
-        path: 'deviceGroup',
-        name: 'DeviceGroup',
-        meta: { title: 'DeviceGroupManage', icon: 'ChatRound' /*keepAlive: true*/ },
-        component: () => import('@/views/group/deviceGroupList.vue'),
-      },
       {
         path: 'index',
         name: 'UserList',
-        meta: { title: 'UserManage', icon: 'User' /*keepAlive: true*/ },
+        meta: { title: 'UserManage', icon: 'User' },
         component: () => import('@/views/user/index.vue'),
       },
       {
@@ -143,64 +144,113 @@ export const asyncRoutes = [
         component: () => import('@/views/user/edit.vue'),
       },
       {
-        path: 'addressBookName',
+        path: 'group',
+        name: 'UserGroup',
+        meta: { title: 'GroupManage', icon: 'ChatRound' },
+        component: () => import('@/views/group/index.vue'),
+      },
+      {
+        path: 'sessoes',
+        name: 'UserToken',
+        meta: { title: 'UserToken', icon: 'Ticket' },
+        component: () => import('@/views/user/token.vue'),
+      },
+    ],
+  },
+  {
+    path: '/catalogo',
+    name: 'AddressBookRoot',
+    meta: { title: 'MenuAddressBook', icon: 'Notebook' },
+    component: Layout,
+    children: [
+      {
+        path: 'catalogos',
         name: 'UserAddressBookName',
-        meta: { title: 'AddressBookNameManage', icon: 'Collection' /*keepAlive: true*/ },
+        meta: { title: 'AddressBookNameManage', icon: 'Collection' },
         component: () => import('@/views/address_book/collection.vue'),
       },
       {
-        path: 'addressBook',
+        path: 'enderecos',
         name: 'UserAddressBook',
-        meta: { title: 'AddressBookManage', icon: 'Notebook' /*keepAlive: true*/ },
+        meta: { title: 'AddressBookManage', icon: 'Notebook' },
         component: () => import('@/views/address_book/index.vue'),
       },
       {
-        path: 'tag',
+        path: 'etiquetas',
         name: 'UserTag',
-        meta: { title: 'TagsManage', icon: 'CollectionTag' /*keepAlive: true*/ },
+        meta: { title: 'TagsManage', icon: 'CollectionTag' },
         component: () => import('@/views/tag/index.vue'),
       },
+    ],
+  },
+  {
+    path: '/servidor',
+    name: 'Server',
+    meta: { title: 'MenuServer', icon: 'Setting' },
+    component: Layout,
+    children: [
       {
-        path: '/oauth',
+        path: 'controle',
+        name: 'ServerCmd',
+        meta: { title: 'ServerCmd', icon: 'Tools' },
+        component: () => import('@/views/rustdesk/control.vue'),
+      },
+      {
+        path: 'oauth',
         name: 'Oauth',
-        meta: { title: 'OauthManage', icon: 'Link' /*keepAlive: true*/ },
+        meta: { title: 'OauthManage', icon: 'Link' },
         component: () => import('@/views/oauth/index.vue'),
       },
+    ],
+  },
+  {
+    path: '/my',
+    name: 'My',
+    redirect: '/my/perfil',
+    meta: { title: 'MenuMyAccount', icon: 'Avatar' },
+    component: Layout,
+    children: [
       {
-        path: '/userToken',
-        name: 'UserToken',
-        meta: { title: 'UserToken', icon: 'Ticket' /*keepAlive: true*/ },
-        component: () => import('@/views/user/token.vue'),
+        path: 'perfil',
+        name: 'MyInfo',
+        meta: { title: 'Userinfo', icon: 'User' },
+        component: () => import('@/views/my/info.vue'),
       },
       {
-        path: '/loginLog',
-        name: 'LoginLog',
-        meta: { title: 'LoginLog', icon: 'List' /*keepAlive: true*/ },
-        component: () => import('@/views/login/log.vue'),
+        path: 'peer',
+        name: 'MyPeer',
+        meta: { title: 'MyPeer', icon: 'Monitor' },
+        component: () => import('@/views/my/peer/index.vue'),
       },
       {
-        path: '/auditConn',
-        name: 'AuditConn',
-        meta: { title: 'AuditConnLog', icon: 'Tickets' /*keepAlive: true*/ },
-        component: () => import('@/views/audit/connList.vue'),
+        path: 'address_book_collection',
+        name: 'MyAddressBookCollection',
+        meta: { title: 'AddressBookName', icon: 'Collection' },
+        component: () => import('@/views/my/address_book/collection.vue'),
       },
       {
-        path: '/auditFile',
-        name: 'AuditFile',
-        meta: { title: 'AuditFileLog', icon: 'Files' /*keepAlive: true*/ },
-        component: () => import('@/views/audit/fileList.vue'),
+        path: 'address_book',
+        name: 'MyAddressBookList',
+        meta: { title: 'AddressBooks', icon: 'Notebook' },
+        component: () => import('@/views/my/address_book/index.vue'),
       },
       {
-        path: '/shareRecord',
-        name: 'ShareRecord',
-        meta: { title: 'ShareRecord', icon: 'Share' /*keepAlive: true*/ },
-        component: () => import('@/views/share_record/index.vue'),
+        path: 'tag',
+        name: 'MyTagList',
+        meta: { title: 'Tags', icon: 'CollectionTag' },
+        component: () => import('@/views/my/tag/index.vue'),
       },
       {
-        path: '/serverCmd',
-        name: 'ServerCmd',
-        meta: { title: 'ServerCmd', icon: 'Tools' /*keepAlive: true*/ },
-        component: () => import('@/views/rustdesk/control.vue'),
+        path: 'shareRecord',
+        name: 'MyShareRecordList',
+        meta: { title: 'ShareRecord', icon: 'Share' },
+        component: () => import('@/views/my/share_record/index.vue'),
+      },
+      {
+        path: 'loginLog',
+        name: 'MyLoginLog',
+        meta: { title: 'LoginLog', icon: 'List' },
+        component: () => import('@/views/my/login_log/index.vue'),
       },
     ],
   },
@@ -213,4 +263,3 @@ export const router = createRouter({
   history: createWebHashHistory(),
   routes: constantRoutes,
 })
-

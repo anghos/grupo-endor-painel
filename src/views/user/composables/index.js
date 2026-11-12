@@ -73,10 +73,10 @@ export function useToEditOrAdd () {
     router.push('/user/add')
   }
   const toTag = (row) => {
-    router.push('/user/tag/?user_id=' + row.id)
+    router.push({ name: 'UserTag', query: { user_id: row.id } })
   }
   const toAddressBook = (row) => {
-    router.push('/user/addressBook/?user_id=' + row.id)
+    router.push({ name: 'UserAddressBook', query: { user_id: row.id } })
   }
   return {
     toAdd,
