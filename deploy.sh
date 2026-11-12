@@ -1,24 +1,32 @@
 #!/usr/bin/env bash
-# Publica o console Grupo Endor no servidor. A pasta /opt/rustdesk/admin-ui é
-# montada no contêiner rustdesk-api em /app/resources/admin (URL /_admin/).
-# Não precisa de sudo: a pasta pertence ao usuário endor.
+# Publica no servidor, sem sudo (as pastas pertencem ao usuário endor):
+#  - console administrativo -> /opt/rustdesk/admin-ui      (contêiner rustdesk-api, URL /_admin/)
+#  - página de download     -> /opt/rustdesk/download-page (contêiner rustdesk-proxy, URL /baixar/)
 #
 # Uso (Git Bash, na pasta do projeto):  ./deploy.sh
 set -euo pipefail
 
 SERVER="${SERVER:-endor@192.168.0.33}"
 KEY="${KEY:-$HOME/.ssh/id_ed25519}"
-REMOTE_DIR="/opt/rustdesk/admin-ui"
 
 cd "$(dirname "$0")"
 npx vite build
 tar -C dist -czf ge-admin-ui.tgz .
-scp -i "$KEY" -q ge-admin-ui.tgz "$SERVER:/tmp/ge-admin-ui.tgz"
-rm -f ge-admin-ui.tgz
-ssh -i "$KEY" "$SERVER" "set -e
-  rm -rf /tmp/ge-admin-ui && mkdir -p /tmp/ge-admin-ui
-  tar -C /tmp/ge-admin-ui -xzf /tmp/ge-admin-ui.tgz
-  find $REMOTE_DIR -mindepth 1 -delete
-  cp -a /tmp/ge-admin-ui/. $REMOTE_DIR/
-  rm -rf /tmp/ge-admin-ui /tmp/ge-admin-ui.tgz
-  echo 'Publicado em $REMOTE_DIR'"
+tar -C download-page -czf ge-download-page.tgz .
+scp -i "$KEY" -q ge-admin-ui.tgz ge-download-page.tgz "$SERVER:/tmp/"
+rm -f ge-admin-ui.tgz ge-download-page.tgz
+
+ssh -i "$KEY" "$SERVER" 'set -e
+publish () {
+  dir=$1; pkg=$2
+  if [ ! -w "$dir" ]; then echo "AVISO: $dir não existe ou não é gravável; pulando"; return; fi
+  rm -rf /tmp/ge-pub && mkdir -p /tmp/ge-pub
+  tar -C /tmp/ge-pub -xzf "$pkg"
+  find "$dir" -mindepth 1 -delete
+  cp -a /tmp/ge-pub/. "$dir"/
+  rm -rf /tmp/ge-pub
+  echo "Publicado em $dir"
+}
+publish /opt/rustdesk/admin-ui /tmp/ge-admin-ui.tgz
+publish /opt/rustdesk/download-page /tmp/ge-download-page.tgz
+rm -f /tmp/ge-admin-ui.tgz /tmp/ge-download-page.tgz'

@@ -684,5 +684,41 @@
   },
   "Inventory": {
     "One": "Inventory"
+  },
+  "StaleDeviceAlert": {
+    "One": "No signal for {param} days. Check whether the computer is still in use."
+  },
+  "Registration": {
+    "One": "Registration"
+  },
+  "Details": {
+    "One": "Details"
+  },
+  "InventoryPlaceholder": {
+    "One": "e.g. PAT-00123"
+  },
+  "AccessHistory": {
+    "One": "Access history"
+  },
+  "AccessesReceived": {
+    "One": "Received"
+  },
+  "AccessesMade": {
+    "One": "Made"
+  },
+  "InProgress": {
+    "One": "in progress"
+  },
+  "StaleDevices": {
+    "One": "No signal for 30+ days"
+  },
+  "StaleDevicesHint": {
+    "One": "Computers that have not connected for over 30 days"
+  },
+  "OpenDetails": {
+    "One": "Open details"
+  },
+  "AllGood": {
+    "One": "All good here"
   }
 }

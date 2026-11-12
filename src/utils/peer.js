@@ -1,5 +1,11 @@
 // Grupo Endor: o cliente envia heartbeat a cada 15 s; sem sinal há 60 s = offline
 export const ONLINE_WINDOW_SECONDS = 60
+// Máquinas sem sinal há este número de dias entram no alerta "sem sinal"
+export const STALE_DAYS = 30
+export const isStale = (lastOnlineTime) => {
+  if (!lastOnlineTime) return true
+  return Date.now() / 1000 - lastOnlineTime >= STALE_DAYS * 86400
+}
 export const isOnline = (lastOnlineTime) => {
   if (!lastOnlineTime) return false
   return Date.now() / 1000 - lastOnlineTime < ONLINE_WINDOW_SECONDS

@@ -85,7 +85,11 @@
             </template>
           </el-table-column>
           <el-table-column v-if="c.name==='cpu'" prop="cpu" label="CPU" align="center" width="100" show-overflow-tooltip/>
-          <el-table-column v-if="c.name==='hostname'" prop="hostname" :label="T('Hostname')" align="center" width="120"/>
+          <el-table-column v-if="c.name==='hostname'" prop="hostname" :label="T('Hostname')" align="center" min-width="150">
+            <template #default="{row}">
+              <el-link type="primary" :underline="false" class="ge-hostlink" @click="openDrawer(row)">{{ row.hostname || row.id || '-' }}</el-link>
+            </template>
+          </el-table-column>
           <el-table-column v-if="c.name==='memory'" prop="memory" :label="T('Memory')" align="center" width="120"/>
           <el-table-column v-if="c.name==='os'" prop="os" :label="T('Os')" align="center" width="120" show-overflow-tooltip/>
           <el-table-column v-if="c.name==='last_online_time'" prop="last_online_time" :label="T('LastOnlineTime')" align="center" min-width="120">
@@ -122,6 +126,7 @@
               <el-button size="small" :icon="MoreFilled"/>
               <template #dropdown>
                 <el-dropdown-menu>
+                  <el-dropdown-item @click="openDrawer(row)">{{ T('OpenDetails') }}</el-dropdown-item>
                   <el-dropdown-item @click="toAddressBook(row)">{{ T('AddToAddressBook') }}</el-dropdown-item>
                   <el-dropdown-item divided @click="del(row)"><span style="color: var(--ge-danger)">{{ T('Delete') }}</span></el-dropdown-item>
                 </el-dropdown-menu>
@@ -185,6 +190,8 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+
+    <DeviceDrawer v-model="drawerVisible" :peer="drawerPeer" :groups="groupListRes.list" @saved="onDrawerSaved"/>
 
     <el-dialog v-model="moveVisible" width="440" :title="T('MoveToClient')">
       <el-form label-position="top">
@@ -282,6 +289,19 @@
   import { batchCreateFromPeers } from '@/api/address_book'
   import { useRepositories as useCollectionRepositories } from '@/views/address_book/collection'
   import createABForm from '@/views/peer/createABForm.vue'
+  import DeviceDrawer from '@/components/DeviceDrawer.vue'
+
+  // Grupo Endor: ficha do dispositivo
+  const drawerVisible = ref(false)
+  const drawerPeer = ref(null)
+  const openDrawer = (row) => {
+    drawerPeer.value = row
+    drawerVisible.value = true
+  }
+  const onDrawerSaved = (updated) => {
+    drawerPeer.value = updated
+    getList()
+  }
   import { UploadFilled } from '@element-plus/icons-vue'
 
   const appStore = useAppStore()
@@ -359,6 +379,9 @@
     if (route.name !== 'Peer') return
     if (route.query.group_id !== undefined) {
       listQuery.group_id = Number(route.query.group_id)
+    }
+    if (route.query.time_ago !== undefined) {
+      listQuery.time_ago = Number(route.query.time_ago)
     }
     if (route.query.online !== undefined) {
       listQuery.online = route.query.online === '1'

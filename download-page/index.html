@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Suporte Remoto Grupo Endor</title>
+  <meta name="description" content="Baixe o GrupoEndor para receber suporte remoto da Grupo Endor Tecnologia.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.ico">
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      src: url('inter.woff2') format('woff2');
+      font-weight: 100 900;
+      font-display: swap;
+    }
+
+    :root {
+      --bg: #f3f5f9;
+      --surface: #ffffff;
+      --border: #e3e8ef;
+      --text: #16212e;
+      --text-2: #5b6878;
+      --text-3: #8a96a6;
+      --brand: #1a4a6b;
+      --accent: #1f5f8b;
+      --accent-hover: #194c6f;
+      --accent-soft: #e9eff3;
+      --warn-bg: #fff7e6;
+      --warn-border: #f5d79a;
+      --warn-text: #7a4d00;
+      color-scheme: light;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d141c;
+        --surface: #141d27;
+        --border: #233142;
+        --text: #e6edf5;
+        --text-2: #a3b1c2;
+        --text-3: #6f7f92;
+        --brand: #8cc4f0;
+        --accent: #4f9bd8;
+        --accent-hover: #72afe0;
+        --accent-soft: #1a2a3a;
+        --warn-bg: #2a2110;
+        --warn-border: #5c4718;
+        --warn-text: #f3cf86;
+        color-scheme: dark;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at 15% 10%, rgba(79, 155, 216, 0.35), transparent 45%),
+        linear-gradient(145deg, #0f2d44 0%, #1a4a6b 55%, #12364f 100%);
+      color: #fff;
+      padding: 40px 16px 120px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      right: -110px;
+      top: -60px;
+      width: 380px;
+      height: 380px;
+      background: url('estrela.png') center / contain no-repeat;
+      opacity: 0.08;
+      filter: brightness(0) invert(1);
+      pointer-events: none;
+    }
+
+    .wrap {
+      max-width: 880px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+
+    .brand img { width: 40px; height: 40px; }
+
+    .brand strong { display: block; font-size: 17px; letter-spacing: -0.01em; }
+    .brand span { font-size: 12px; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.08em; }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(28px, 5vw, 40px);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 560px;
+      font-size: 17px;
+      line-height: 1.55;
+      opacity: 0.85;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(16, 24, 40, 0.10);
+      padding: 28px;
+      margin: -84px auto 24px;
+      max-width: 880px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .download {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .download h2 { margin: 0 0 4px; font-size: 20px; }
+    .download p { margin: 0; color: var(--text-2); font-size: 14px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 24px;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      font-size: 16px;
+      text-decoration: none;
+      transition: background 0.15s, transform 0.15s;
+    }
+
+    .btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+    .btn svg { width: 20px; height: 20px; }
+
+    .meta { margin-top: 8px; font-size: 12px; color: var(--text-3); text-align: right; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .step { display: flex; gap: 12px; }
+
+    .num {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step h3 { margin: 4px 0 4px; font-size: 15px; }
+    .step p { margin: 0; color: var(--text-2); font-size: 13px; line-height: 1.5; }
+
+    .note {
+      margin-top: 24px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: var(--warn-bg);
+      border: 1px solid var(--warn-border);
+      color: var(--warn-text);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .note strong { font-weight: 650; }
+
+    footer {
+      max-width: 880px;
+      margin: 0 auto 32px;
+      padding: 0 16px;
+      color: var(--text-3);
+      font-size: 12px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    footer a { color: inherit; }
+
+    @media (max-width: 720px) {
+      .card { margin: -84px 16px 24px; padding: 22px; }
+      .steps { grid-template-columns: 1fr; }
+      .meta { text-align: left; }
+      .btn { width: 100%; justify-content: center; }
+      .download > div:last-child { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="wrap">
+      <div class="brand">
+        <img src="estrela.png" alt="">
+        <div>
+          <strong>Grupo Endor</strong>
+          <span>Acesso Remoto</span>
+        </div>
+      </div>
+      <h1>Suporte remoto Grupo Endor</h1>
+      <p class="lead">Baixe o programa abaixo para que um técnico da Grupo Endor possa acessar o seu computador com segurança e resolver o seu atendimento.</p>
+    </div>
+  </section>
+
+  <main class="card">
+    <div class="download">
+      <div>
+        <h2>GrupoEndor para Windows</h2>
+        <p>Windows 10 e 11 (64 bits). Já vem configurado, não precisa ajustar nada.</p>
+      </div>
+      <div>
+        <a id="download" class="btn" href="https://github.com/anghos/rustdesk/releases/latest" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+          Baixar o GrupoEndor
+        </a>
+        <div id="meta" class="meta">Versão mais recente</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <div>
+          <h3>Baixe e abra</h3>
+          <p>Clique no botão acima e abra o arquivo baixado. Você pode só executar ou clicar em <b>Instalar</b> para deixar instalado.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <div>
+          <h3>Informe o ID e a senha</h3>
+          <p>Na tela do GrupoEndor aparecem um <b>ID</b> e uma <b>senha</b>. Passe esses dois dados ao técnico que está atendendo você.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <div>
+          <h3>Acompanhe o atendimento</h3>
+          <p>Quando o técnico conectar, você vê tudo o que ele faz. Para encerrar, basta fechar a janela de conexão.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>O Windows mostrou "O Windows protegeu o computador"?</strong>
+      Clique em <b>Mais informações</b> e depois em <b>Executar assim mesmo</b>. Esse aviso aparece para programas novos e é esperado.
+      Só passe o ID e a senha para técnicos da Grupo Endor que estejam falando com você.
+    </div>
+  </main>
+
+  <footer>
+    Grupo Endor Tecnologia · Programa baseado no <a href="https://github.com/anghos/rustdesk" rel="noopener">RustDesk</a> (licença AGPL-3.0)
+  </footer>
+
+  <script>
+    // Descobre o instalador mais recente publicado no GitHub
+    (async function () {
+      const btn = document.getElementById('download');
+      const meta = document.getElementById('meta');
+      try {
+        const res = await fetch('https://api.github.com/repos/anghos/rustdesk/releases/latest', {
+          headers: { 'Accept': 'application/vnd.github+json' },
+        });
+        if (!res.ok) return;
+        const release = await res.json();
+        const asset = (release.assets || []).find(a => /^GrupoEndor-.*-x86_64\.exe$/.test(a.name));
+        if (!asset) return;
+        btn.href = asset.browser_download_url;
+        const mb = (asset.size / 1024 / 1024).toFixed(0);
+        const date = new Date(release.published_at).toLocaleDateString('pt-BR');
+        meta.textContent = `Versão ${release.tag_name} · ${mb} MB · publicada em ${date}`;
+      } catch (e) {
+        // sem acesso à API: o botão continua apontando para a página de downloads
+      }
+    })();
+  </script>
+</body>
+</html>

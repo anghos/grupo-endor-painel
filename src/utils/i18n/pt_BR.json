@@ -747,5 +747,41 @@
   },
   "Inventory": {
     "One": "Inventário"
+  },
+  "StaleDeviceAlert": {
+    "One": "Sem sinal há {param} dias. Verifique se o computador ainda está em uso."
+  },
+  "Registration": {
+    "One": "Cadastro"
+  },
+  "Details": {
+    "One": "Detalhes"
+  },
+  "InventoryPlaceholder": {
+    "One": "Ex.: PAT-00123"
+  },
+  "AccessHistory": {
+    "One": "Histórico de acessos"
+  },
+  "AccessesReceived": {
+    "One": "Recebidos"
+  },
+  "AccessesMade": {
+    "One": "Feitos"
+  },
+  "InProgress": {
+    "One": "em andamento"
+  },
+  "StaleDevices": {
+    "One": "Sem sinal há 30+ dias"
+  },
+  "StaleDevicesHint": {
+    "One": "Computadores que não se conectam há mais de 30 dias"
+  },
+  "OpenDetails": {
+    "One": "Abrir ficha"
+  },
+  "AllGood": {
+    "One": "Tudo certo por aqui"
   }
 }

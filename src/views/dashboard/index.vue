@@ -75,7 +75,7 @@
         </header>
         <div v-if="onlineList.length" class="ge-list">
           <div v-for="p in onlineList" :key="p.row_id" class="ge-list-item">
-            <div class="li-main">
+            <div class="li-main clickable" @click="openDrawer(p)">
               <strong>{{ p.hostname || p.id }}</strong>
               <span>{{ p.id }} · {{ groupName(p.group_id) }}<template v-if="p.alias"> · {{ T('Inventory') }} {{ p.alias }}</template></span>
             </div>
@@ -118,6 +118,23 @@
         <div v-else class="ge-empty">{{ T('NoData') }}</div>
       </section>
 
+      <!-- Sem sinal há 30+ dias -->
+      <section class="ge-panel span-2" v-if="staleList.length">
+        <header>
+          <h3>{{ T('StaleDevices') }} <span class="badge-warn">{{ staleList.length }}</span></h3>
+          <el-button link type="primary" @click="go('Peer', { time_ago: 2592000 })">{{ T('SeeAll') }}</el-button>
+        </header>
+        <div class="ge-list">
+          <div v-for="p in staleList.slice(0, 6)" :key="p.row_id" class="ge-list-item">
+            <div class="li-main clickable" @click="openDrawer(p)">
+              <strong>{{ p.hostname || p.id }}</strong>
+              <span>{{ p.id }} · {{ groupName(p.group_id) }}<template v-if="p.alias"> · {{ T('Inventory') }} {{ p.alias }}</template></span>
+            </div>
+            <span class="muted small">{{ p.last_online_time ? timeAgo(p.last_online_time * 1000) : '-' }}</span>
+          </div>
+        </div>
+      </section>
+
       <!-- Últimos logins -->
       <section class="ge-panel">
         <header>
@@ -137,6 +154,8 @@
         <div v-else class="ge-empty">{{ T('NoData') }}</div>
       </section>
     </div>
+
+    <DeviceDrawer v-model="drawerVisible" :peer="drawerPeer" :groups="groups" @saved="onDrawerSaved"/>
   </div>
 </template>
 
@@ -151,8 +170,9 @@
   import { list as userList } from '@/api/user'
   import { T } from '@/utils/i18n'
   import { timeAgo } from '@/utils/time'
-  import { connectByClient, isOnline, parseServerTime } from '@/utils/peer'
+  import { connectByClient, isOnline, isStale, parseServerTime } from '@/utils/peer'
   import { useUserStore } from '@/store/user'
+  import DeviceDrawer from '@/components/DeviceDrawer.vue'
 
   const router = useRouter()
   const userStore = useUserStore()
@@ -219,6 +239,21 @@
     .filter(p => isOnline(p.last_online_time))
     .sort((a, b) => b.last_online_time - a.last_online_time)
     .slice(0, 8))
+
+  const staleList = computed(() => peers.value
+    .filter(p => p.id && isStale(p.last_online_time))
+    .sort((a, b) => (a.last_online_time || 0) - (b.last_online_time || 0)))
+
+  const drawerVisible = ref(false)
+  const drawerPeer = ref(null)
+  const openDrawer = (p) => {
+    drawerPeer.value = p
+    drawerVisible.value = true
+  }
+  const onDrawerSaved = (updated) => {
+    drawerPeer.value = updated
+    load()
+  }
 
   const peerName = (id) => {
     const p = peers.value.find(x => x.id === id)
@@ -352,6 +387,7 @@
 .ge-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-flow: row dense;
   gap: 16px;
 }
 
@@ -475,6 +511,25 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+}
+
+.clickable {
+  cursor: pointer;
+
+  &:hover strong {
+    color: var(--el-color-primary);
+  }
+}
+
+.badge-warn {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #b45309;
+  background: color-mix(in srgb, #f59e0b 18%, transparent);
 }
 
 .ge-avatar-sm {
