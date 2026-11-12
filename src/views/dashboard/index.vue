@@ -76,8 +76,8 @@
         <div v-if="onlineList.length" class="ge-list">
           <div v-for="p in onlineList" :key="p.row_id" class="ge-list-item">
             <div class="li-main">
-              <strong>{{ p.alias || p.hostname || p.id }}</strong>
-              <span>{{ p.id }} · {{ groupName(p.group_id) }}</span>
+              <strong>{{ p.hostname || p.id }}</strong>
+              <span>{{ p.id }} · {{ groupName(p.group_id) }}<template v-if="p.alias"> · {{ T('Inventory') }} {{ p.alias }}</template></span>
             </div>
             <el-tooltip :content="T('ConnectHint')" placement="left">
               <el-button size="small" type="primary" plain @click="connectByClient(p.id)">{{ T('Connect') }}</el-button>
@@ -222,7 +222,7 @@
 
   const peerName = (id) => {
     const p = peers.value.find(x => x.id === id)
-    return p ? (p.alias || p.hostname || id) : id
+    return p ? (p.hostname || id) : id
   }
   const groupName = (gid) => groups.value.find(g => g.id === gid)?.name || T('NoClient')
   const userName = (uid) => users.value.find(u => u.id === uid)?.username || `#${uid}`

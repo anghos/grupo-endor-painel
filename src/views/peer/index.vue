@@ -106,7 +106,7 @@
           </el-table-column>
           <el-table-column v-if="c.name==='uuid'" prop="uuid" :label="T('Uuid')" align="center" width="120" show-overflow-tooltip/>
           <el-table-column v-if="c.name==='version'" prop="version" :label="T('Version')" align="center" width="80"/>
-          <el-table-column v-if="c.name==='alias'" prop="alias" :label="T('Alias')" align="center" width="80"/>
+          <el-table-column v-if="c.name==='alias'" prop="alias" :label="T('Inventory')" align="center" width="120"/>
           <el-table-column v-if="c.name==='created_at'" prop="created_at" :label="T('CreatedAt')" align="center" width="150"/>
           <el-table-column v-if="c.name==='updated_at'" prop="updated_at" :label="T('UpdatedAt')" align="center" width="150"/>
         </template>
@@ -176,7 +176,7 @@
         <el-form-item :label="T('Version')" prop="version">
           <el-input v-model="formData.version"></el-input>
         </el-form-item>
-        <el-form-item :label="T('Alias')" prop="alias">
+        <el-form-item :label="T('Inventory')" prop="alias">
           <el-input v-model="formData.alias"></el-input>
         </el-form-item>
         <el-form-item>
@@ -653,11 +653,13 @@
     { name: 'group_id', visible: true, label: 'Group' },
     { name: 'uuid', visible: true, label: 'Uuid' },
     { name: 'version', visible: true, label: 'Version' },
-    { name: 'alias', visible: true, label: 'Alias' },
+    { name: 'alias', visible: true, label: 'Inventory' },
     { name: 'created_at', visible: true, label: 'CreatedAt' },
     { name: 'updated_at', visible: true, label: 'UpdatedAt' },
   ])
   const visibleColumns = ref(JSON.parse(localStorage.getItem('peer_visible_columns')) || allColumns.value)
+  // Grupo Endor: colunas salvas antes da troca "Apelido" -> "Inventário"
+  visibleColumns.value.forEach(c => { if (c.name === 'alias') c.label = 'Inventory' })
   const showColumnSetting = () => {
     columnSettingVisible.value = true
   }

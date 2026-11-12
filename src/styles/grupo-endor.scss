@@ -119,6 +119,7 @@ html, body {
     .el-form-item__label {
       color: var(--ge-text-2);
       font-weight: 500;
+      white-space: nowrap;
     }
   }
 
